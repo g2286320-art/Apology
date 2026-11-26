@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm So Sorry, Navya ❤️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Great Vibes, Dancing Script, Poppins, and Lora -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti for celebratory heart/petal burst -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        script: ['"Great Vibes"', 'cursive'],
+                        dancing: ['"Dancing Script"', 'cursive'],
+                        serif: ['"Lora"', 'serif'],
+                        sans: ['"Poppins"', 'sans-serif'],
+                    },
+                    colors: {
+                        roseGold: '#B76E79',
+                        deepRose: '#9E4758',
+                        softBlush: '#FFF0F3',
+                        petalPink: '#FFD6E0',
+                        warmCream: '#FFFDF9',
+                    },
+                    animation: {
+                        'float-slow': 'floatSlow 6s ease-in-out infinite',
+                        'pulse-gentle': 'pulseGentle 2s infinite',
+                        'marquee-slow': 'marquee 28s linear infinite',
+                        'ken-burns': 'kenBurns 12s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        floatSlow: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(-1deg)' },
+                            '50%': { transform: 'translateY(-10px) rotate(1.5deg)' },
+                        },
+                        pulseGentle: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.06)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translate3d(0, 0, 0)' },
+                            '100%': { transform: 'translate3d(-50%, 0, 0)' },
+                        },
+                        kenBurns: {
+                            '0%': { transform: 'rotate(-90deg) scale(1.38)' },
+                            '100%': { transform: 'rotate(-90deg) scale(1.52)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom romantic styling & fluid mobile/laptop responsiveness */
+        html, body {
+            background: linear-gradient(135deg, #FFFDF9 0%, #FFF0F3 45%, #FFE3EA 100%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
+            overflow-x: hidden;
+            color: #4A2C34;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Fluid responsive typography for 320px phones up to 1440px+ laptops */
+        .fluid-hero-title {
+            font-size: clamp(2.5rem, 7vw + 1rem, 4.75rem);
+            line-height: 1.15;
+        }
+
+        .fluid-celebration-title {
+            font-size: clamp(2.6rem, 7.5vw + 1rem, 5.25rem);
+            line-height: 1.12;
+        }
+
+        .fluid-subtitle {
+            font-size: clamp(1.35rem, 3.2vw + 0.5rem, 2rem);
+        }
+
+        .fluid-promise-title {
+            font-size: clamp(1.75rem, 4.5vw + 0.5rem, 3rem);
+        }
+
+        /* Floating background hearts canvas */
+        #bg-hearts-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -40px;
+            opacity: 0;
+            animation: riseUp linear forwards;
+            user-select: none;
+        }
+
+        @keyframes riseUp {
+            0% {
+                transform: translateY(0) scale(0.7) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.65;
+            }
+            85% {
+                opacity: 0.55;
+            }
+            100% {
+                transform: translateY(-110vh) scale(1.2) rotate(35deg);
+                opacity: 0;
+            }
+        }
+
+        /* Glassmorphic romantic card */
+        .romantic-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 194, 209, 0.7);
+            box-shadow: 0 20px 50px rgba(183, 110, 121, 0.16), 0 4px 16px rgba(255, 182, 193, 0.25);
+        }
+
+        /* Orientation fix for the uploaded sideways couple photo:
+           In the raw file, heads are on the right and chins on the left, so -90deg rotates them upright! */
+        .upright-couple-photo {
+            transform: rotate(-90deg) scale(1.42);
+            transform-origin: center center;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Polaroid card styling */
+        .polaroid-frame {
+            background: #FFFFFF;
+            padding: 10px 10px 30px 10px;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(158, 71, 88, 0.16);
+            border: 1px solid rgba(255, 214, 224, 0.85);
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+        }
+
+        @media (min-width: 640px) {
+            .polaroid-frame {
+                padding: 12px 12px 36px 12px;
+            }
+        }
+
+        .polaroid-frame:hover {
+            transform: translateY(-8px) scale(1.03) !important;
+            box-shadow: 0 20px 40px rgba(158, 71, 88, 0.25);
+        }
+
+        /* Pause marquee on hover (laptop) or touch/paused state (mobile) */
+        .marquee-wrapper:hover .marquee-track,
+        .marquee-wrapper.is-paused .marquee-track {
+            animation-play-state: paused;
+        }
+
+        .marquee-track {
+            will-change: transform;
+        }
+
+        /* Smooth page transition */
+        .page-section {
+            transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .page-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(24px) scale(0.98);
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .page-visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+            position: relative;
+        }
+
+        /* Runaway No Button smooth transition */
+        #no-btn {
+            transition: left 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.2s ease;
+            touch-action: manipulation;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-pink-200 selection:text-deepRose">
+
+    <!-- Floating Ambient Hearts & Sparkles Background -->
+    <div id="bg-hearts-container" aria-hidden="true"></div>
+
+    <!-- Main Wrapper -->
+    <main class="relative z-10 min-h-[100dvh] w-full flex flex-col items-center justify-center px-3 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-14">
+
+        <!-- =========================================================
+             PAGE 1: THE APOLOGY & INTERACTIVE QUESTION
+             ========================================================= -->
+        <section id="page-1" class="page-section page-visible w-full max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto">
+            <div class="romantic-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-11 lg:p-12 text-center relative overflow-visible">
+
+                <!-- Top Decorative Floral/Heart Emblem -->
+                <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-pink-100 to-rose-200 shadow-inner mb-3 sm:mb-4 animate-float-slow">
+                    <span class="text-2xl sm:text-3xl" role="img" aria-label="Heart">🥺❤️</span>
+                </div>
+
+                <!-- Header -->
+                <h1 class="font-script fluid-hero-title text-deepRose mb-2 sm:mb-3 drop-shadow-sm">
+                    I'm So Sorry, Navya ❤️
+                </h1>
+
+                <p class="font-dancing fluid-subtitle text-roseGold mb-5 sm:mb-6">
+                    Please read this from the bottom of my heart...
+                </p>
+
+                <!-- Divider -->
+                <div class="flex items-center justify-center gap-3 mb-5 sm:mb-6">
+                    <span class="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-pink-300"></span>
+                    <span class="text-pink-400 text-xs sm:text-sm">✦ ♥ ✦</span>
+                    <span class="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-pink-300"></span>
+                </div>
+
+                <!-- Emotional Heartfelt Apology Note -->
+                <div class="font-serif text-sm sm:text-base md:text-lg text-[#5C3742] leading-relaxed space-y-3.5 sm:space-y-4 text-left sm:text-center bg-white/65 rounded-2xl p-4 sm:p-6 md:p-7 border border-pink-100 shadow-sm mb-5 sm:mb-6">
+                    <p>
+                        My dearest <span class="font-semibold text-deepRose">Navya</span>,
+                    </p>
+                    <p>
+                        I am truly, deeply sorry for hurting you and making you feel upset. Seeing you sad or distant breaks my heart into pieces, because your smile is literally my favorite thing in this entire world. When things aren't right between us, everything feels so empty and incomplete.
+                    </p>
+                    <p>
+                        You mean more to me than words could ever capture. I never want to be the reason behind your tears—I only ever want to be the reason you feel safe, cherished, and endlessly loved.
+                    </p>
+                </div>
+
+                <!-- Highlighted Special Callout Box: "I trust you, Jaan ❤️" -->
+                <div class="relative my-6 sm:my-7 p-5 sm:p-7 rounded-2xl bg-gradient-to-r from-[#FFF0F4] via-[#FFE4EC] to-[#FFF0F4] border-2 border-pink-300/80 shadow-md transform transition hover:scale-[1.01]">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-deepRose text-white text-[10px] sm:text-xs font-medium tracking-widest uppercase px-3.5 sm:px-4 py-0.5 sm:py-1 rounded-full shadow whitespace-nowrap">
+                        My Promise To You
+                    </div>
+                    <h2 class="font-dancing fluid-promise-title font-bold text-deepRose mb-2 mt-1">
+                        "I trust you, Jaan ❤️"
+                    </h2>
+                    <p class="font-serif italic text-xs sm:text-sm md:text-base text-[#6D414E] max-w-lg mx-auto leading-relaxed">
+                        With my whole heart, today and always. No matter what happens, my faith in you and in us is unshakable. You are my safe place, my peace, and my everything.
+                    </p>
+                </div>
+
+                <!-- Interactive Question Section -->
+                <div class="mt-6 sm:mt-8 pt-4 border-t border-pink-200/70">
+                    <p class="font-dancing text-xl sm:text-2xl md:text-3xl text-deepRose font-semibold mb-1.5 sm:mb-2">
+                        Will you accept my apology, my love? 🥺
+                    </p>
+                    <p id="plea-subtitle" class="text-xs sm:text-sm text-roseGold/90 mb-5 sm:mb-6 min-h-[20px] px-2 transition-all duration-300">
+                        (Choose wisely, meri jaan... my heart is waiting 💕)
+                    </p>
+
+                    <!-- Buttons Arena -->
+                    <div id="button-arena" class="relative flex flex-wrap items-center justify-center gap-4 sm:gap-8 min-h-[84px] sm:min-h-[96px] py-2">
+                        <!-- YES Button -->
+                        <button
+                            id="yes-btn"
+                            type="button"
+                            class="z-20 px-7 py-3 sm:px-10 sm:py-4 rounded-full bg-gradient-to-r from-[#E11D48] via-[#F43F5E] to-[#FB7185] text-white font-semibold text-base sm:text-xl shadow-lg shadow-rose-300/60 hover:shadow-xl hover:shadow-rose-400/70 active:scale-95 transition-all duration-300 animate-pulse-gentle cursor-pointer flex items-center gap-2"
+                        >
+                            <span>Yes ❤️</span>
+                        </button>
+
+                        <!-- NO Button (Dynamically jumps away on hover/click/touch) -->
+                        <button
+                            id="no-btn"
+                            type="button"
+                            class="z-30 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-white text-[#7A4B58] border-2 border-pink-300 font-medium text-sm sm:text-lg shadow-md hover:bg-pink-50 cursor-pointer select-none whitespace-nowrap"
+                        >
+                            No 😢
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- =========================================================
+             PAGE 2: CELEBRATION, LOVE NOTE & MOVING PHOTOS
+             (Shown when Navya clicks "Yes ❤️")
+             ========================================================= -->
+        <section id="page-2" class="page-section page-hidden w-full max-w-4xl lg:max-w-5xl mx-auto">
+            <div class="romantic-card rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-11 lg:p-12 text-center relative overflow-hidden">
+
+                <!-- Celebration Badge -->
+                <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 rounded-full bg-pink-100 text-deepRose text-xs sm:text-sm font-medium mb-4 shadow-sm animate-bounce max-w-full">
+                    <span>🎉</span>
+                    <span class="truncate">Yay! Thank you for forgiving me, my love!</span>
+                    <span>💖</span>
+                </div>
+
+                <!-- Prominent Romantic Headline -->
+                <h1 class="font-script fluid-celebration-title text-deepRose mb-2 sm:mb-3 drop-shadow-sm">
+                    I love you mera bacha ❤️
+                </h1>
+
+                <p class="font-dancing fluid-subtitle text-roseGold mb-6 sm:mb-8">
+                    Forever &amp; always yours, Navya ✨
+                </p>
+
+                <!-- Responsive Two-Column Layout on Laptops (Hero Photo + Love Note), Stacked on Mobile -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-8 items-center mb-8 sm:mb-10">
+
+                    <!-- Featured Hero Polaroid of the Shared Photo -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="polaroid-frame w-[72vw] max-w-[290px] sm:w-72 md:w-80 animate-float-slow relative">
+                            <!-- Cute tape decoration on top -->
+                            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-20 sm:w-24 h-5 sm:h-6 bg-pink-200/75 backdrop-blur-sm rotate-[-2deg] rounded-sm shadow-xs z-10"></div>
+                            <div class="w-full aspect-square overflow-hidden rounded-lg bg-pink-50 relative">
+                                <img
+                                    id="hero-couple-img"
+                                    src="WhatsApp Image 2026-11-26 at 7.18.20 PM.jpeg"
+                                    alt="Us together smiling"
+                                    class="upright-couple-photo animate-ken-burns"
+                                />
+                            </div>
+                            <p class="font-dancing text-lg sm:text-xl md:text-2xl text-deepRose mt-3">
+                                My favorite smile in the universe ❤️
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Deeply Emotional Love Note -->
+                    <div class="lg:col-span-7 bg-gradient-to-b from-white/90 to-[#FFF5F7]/95 rounded-2xl p-5 sm:p-7 md:p-8 border border-pink-200/80 shadow-sm text-left">
+                        <div class="flex items-center gap-2.5 mb-3">
+                            <span class="text-2xl">💌</span>
+                            <h2 class="font-dancing text-2xl sm:text-3xl md:text-4xl text-deepRose font-bold">
+                                A Love Note For My Bacha
+                            </h2>
+                        </div>
+                        <div class="font-serif text-sm sm:text-base md:text-lg text-[#54313B] leading-relaxed space-y-3.5 sm:space-y-4">
+                            <p>
+                                Mera bacha, thank you for holding my hand even when I mess up, and for having the purest, kindest heart I have ever known. Every single moment with you feels like a blessing I never want to take for granted.
+                            </p>
+                            <p>
+                                I promise to listen better, love you deeper, respect your feelings always, and remind you every single day how deeply <span class="font-semibold text-deepRose">I trust you, Jaan</span>. Whether we are laughing together or overcoming silly little storms, I choose you—in this lifetime and every lifetime after.
+                            </p>
+                            <p class="font-dancing text-xl sm:text-2xl md:text-3xl text-deepRose pt-1">
+                                You are my home, Navya. I love you endlessly. ❤️
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Moving Photos Showcase Section -->
+                <div class="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-pink-200/80">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-5 sm:mb-6 px-1 sm:px-2">
+                        <div class="text-center sm:text-left">
+                            <h3 class="font-dancing text-2xl sm:text-3xl md:text-4xl text-deepRose font-bold">
+                                Our Beautiful Memories ✨
+                            </h3>
+                            <p class="text-xs sm:text-sm text-roseGold">
+                                Moving moments of my favorite person &amp; us 💕
+                            </p>
+                        </div>
+
+                        <!-- Button to add more couple photos from phone gallery or laptop -->
+                        <label class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-pink-50 active:scale-95 text-deepRose border border-pink-300 text-xs sm:text-sm font-medium shadow-xs cursor-pointer transition">
+                            <span>📸 Add More Photos</span>
+                            <input id="photo-uploader" type="file" accept="image/*" multiple class="hidden" />
+                        </label>
+                    </div>
+
+                    <!-- Continuous Smooth Moving Photo Carousel (Marquee) -->
+                    <div id="marquee-wrapper" class="marquee-wrapper relative w-full overflow-hidden py-3 sm:py-4 rounded-2xl bg-gradient-to-r from-pink-100/45 via-white/55 to-pink-100/45 border border-pink-200/60">
+                        <!-- Soft fade edges -->
+                        <div class="pointer-events-none absolute inset-y-0 left-0 w-6 sm:w-14 bg-gradient-to-r from-[#FFF4F7] to-transparent z-10"></div>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 w-6 sm:w-14 bg-gradient-to-l from-[#FFF4F7] to-transparent z-10"></div>
+
+                        <div id="marquee-track" class="marquee-track flex items-center gap-4 sm:gap-6 w-max px-3 sm:px-4">
+                            <!-- Cards injected & duplicated seamlessly via JS so the loop never breaks -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Replay / Back Button -->
+                <div class="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+                    <button
+                        id="celebrate-more-btn"
+                        type="button"
+                        class="px-5 sm:px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white text-xs sm:text-sm font-medium shadow-md hover:shadow-lg active:scale-95 transition cursor-pointer"
+                    >
+                        Shower More Love 💖
+                    </button>
+                    <button
+                        id="back-btn"
+                        type="button"
+                        class="px-4 sm:px-5 py-2.5 rounded-full bg-white/85 hover:bg-white text-roseGold border border-pink-200 text-xs sm:text-sm font-medium active:scale-95 transition cursor-pointer"
+                    >
+                        ← Read Apology Again
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /**
+         * ====================================================================
+         * 0. RELIABLE SHARED PHOTO LOADER (TRIES ALL SHARED FILENAMES)
+         * ====================================================================
+         */
+        const SHARED_PHOTO_SOURCES = [
+            'WhatsApp Image 2026-11-26 at 7.18.20 PM.jpeg',
+            'WhatsApp Image 2026-11-26 at 7.18.20 PM_2.jpeg'
+        ];
+
+        function attachResilientPhotoSource(imgElement, isSidewaysShared = true) {
+            let attemptIndex = 0;
+            imgElement.src = SHARED_PHOTO_SOURCES[attemptIndex];
+
+            imgElement.onerror = function () {
+                attemptIndex++;
+                if (attemptIndex < SHARED_PHOTO_SOURCES.length) {
+                    this.src = SHARED_PHOTO_SOURCES[attemptIndex];
+                } else {
+                    this.onerror = null;
+                    if (isSidewaysShared) {
+                        this.className = 'w-full h-full object-cover';
+                    }
+                    this.src = 'https://placehold.co/600x600/FFE4EC/9E4758?text=Navya+%26+Me+%E2%9D%A4%EF%B8%8F';
+                }
+            };
+        }
+
+        // Attach resilient photo loading to Page 2's featured hero polaroid
+        const heroCoupleImg = document.getElementById('hero-couple-img');
+        if (heroCoupleImg) {
+            attachResilientPhotoSource(heroCoupleImg, true);
+        }
+
+
+        /**
+         * ====================================================================
+         * 1. AMBIENT FLOATING HEARTS & SPARKLES GENERATOR
+         * ====================================================================
+         */
+        const heartsContainer = document.getElementById('bg-hearts-container');
+        const heartSymbols = ['❤️', '💖', '💕', '💗', '🌸', '✨', '💓'];
+
+        function spawnBackgroundHeart() {
+            const heart = document.createElement('span');
+            heart.className = 'floating-heart';
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+
+            const isMobile = window.innerWidth < 640;
+            const size = isMobile ? (Math.random() * 12 + 11) : (Math.random() * 16 + 13);
+            const left = Math.random() * 96; // Keep safely inside 0% to 96vw
+            const duration = Math.random() * 6 + 7;
+
+            heart.style.left = `${left}vw`;
+            heart.style.fontSize = `${size}px`;
+            heart.style.animationDuration = `${duration}s`;
+
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        for (let i = 0; i < 10; i++) {
+            setTimeout(spawnBackgroundHeart, i * 400);
+        }
+        setInterval(spawnBackgroundHeart, 900);
+
+
+        /**
+         * ====================================================================
+         * 2. DYNAMIC "NO" BUTTON RUNAWAY LOGIC (MOBILE + LAPTOP SAFE VIEWPORT)
+         * ====================================================================
+         */
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const pleaSubtitle = document.getElementById('plea-subtitle');
+
+        const pleadingTexts = [
+            "Are you sure? 🥺",
+            "Think again Jaan! ❤️",
+            "Please don't click me 😢",
+            "Wrong button! 👉",
+            "Try the other one ❤️",
+            "Not an option, bacha!",
+            "Mera bacha, please? 💕",
+            "Oops, too slow! 😘",
+            "I'll keep running! 🏃‍♂️💨",
+            "Say Yes meri jaan! 🥰"
+        ];
+
+        const pleadingSubtitles = [
+            "Please forgive me, Navya... I miss your smile 🥺",
+            "My heart only beats for you, Jaan! Click Yes ❤️",
+            "Don't break my heart like this, mera bacha 😢",
+            "Look how shiny and pretty that 'Yes ❤️' button is!",
+            "I trust you & love you endlessly—please say Yes! 💕"
+        ];
+
+        let dodgeCount = 0;
+        let yesScale = 1;
+
+        function getSafeViewportBounds() {
+            const vv = window.visualViewport;
+            const width = vv ? vv.width : window.innerWidth;
+            const height = vv ? vv.height : window.innerHeight;
+            const offsetLeft = vv ? vv.offsetLeft : 0;
+            const offsetTop = vv ? vv.offsetTop : 0;
+            return { width, height, offsetLeft, offsetTop };
+        }
+
+        /**
+         * Moves the "No" button to a safe random position inside the visible viewport
+         * so it works reliably on both small phone screens and large laptop monitors.
+         */
+        function moveNoButton(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Update pleading text on the No button in a continuous loop
+            const textIndex = dodgeCount % pleadingTexts.length;
+            noBtn.textContent = pleadingTexts[textIndex];
+
+            // Update reassuring subtitle
+            pleaSubtitle.textContent = pleadingSubtitles[dodgeCount % pleadingSubtitles.length];
+            dodgeCount++;
+
+            // Gently grow the "Yes" button (slightly smaller cap on narrow mobile screens)
+            const maxYesScale = window.innerWidth < 480 ? 1.24 : 1.38;
+            if (yesScale < maxYesScale) {
+                yesScale += 0.04;
+                yesBtn.style.transform = `scale(${yesScale})`;
+            }
+
+            // Switch to fixed positioning on first dodge so it can roam freely anywhere on screen
+            if (noBtn.style.position !== 'fixed') {
+                const rect = noBtn.getBoundingClientRect();
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = `${rect.left}px`;
+                noBtn.style.top = `${rect.top}px`;
+                noBtn.style.margin = '0';
+            }
+
+            const vp = getSafeViewportBounds();
+            const padding = window.innerWidth < 480 ? 14 : 24;
+            const btnRect = noBtn.getBoundingClientRect();
+            const yesRect = yesBtn.getBoundingClientRect();
+
+            const minX = vp.offsetLeft + padding;
+            const minY = vp.offsetTop + padding;
+            const maxX = Math.max(minX, vp.offsetLeft + vp.width - btnRect.width - padding);
+            const maxY = Math.max(minY, vp.offsetTop + vp.height - btnRect.height - padding);
+
+            let randomX = minX;
+            let randomY = minY;
+            let attempts = 0;
+
+            // Find a spot that doesn't overlap the "Yes" button
+            do {
+                randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+                randomY = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+                attempts++;
+            } while (
+                attempts < 30 &&
+                randomX < yesRect.right + 16 &&
+                randomX + btnRect.width > yesRect.left - 16 &&
+                randomY < yesRect.bottom + 16 &&
+                randomY + btnRect.height > yesRect.top - 16
+            );
+
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+        }
+
+        // Keep fixed No button inside bounds if user rotates phone or resizes laptop window
+        window.addEventListener('resize', () => {
+            if (noBtn.style.position === 'fixed' && noBtn.style.display !== 'none') {
+                const vp = getSafeViewportBounds();
+                const btnRect = noBtn.getBoundingClientRect();
+                const clampedLeft = Math.min(Math.max(12, btnRect.left), Math.max(12, vp.width - btnRect.width - 12));
+                const clampedTop = Math.min(Math.max(12, btnRect.top), Math.max(12, vp.height - btnRect.height - 12));
+                noBtn.style.left = `${clampedLeft}px`;
+                noBtn.style.top = `${clampedTop}px`;
+            }
+        });
+
+        // Trigger movement on click, mouseenter (laptop hover), and touchstart (mobile tap)
+        noBtn.addEventListener('click', moveNoButton);
+        noBtn.addEventListener('mouseenter', moveNoButton);
+        noBtn.addEventListener('touchstart', moveNoButton, { passive: false });
+
+
+        /**
+         * ====================================================================
+         * 3. PAGE TRANSITION & CELEBRATION CONFETTI
+         * ====================================================================
+         */
+        const page1 = document.getElementById('page-1');
+        const page2 = document.getElementById('page-2');
+        const celebrateMoreBtn = document.getElementById('celebrate-more-btn');
+        const backBtn = document.getElementById('back-btn');
+
+        function launchLoveConfetti() {
+            if (typeof confetti !== 'function') return;
+
+            const colors = ['#FF4D6D', '#FF8FA3', '#FFB3C1', '#E11D48', '#FBBF24'];
+
+            confetti({
+                particleCount: 85,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: colors
+            });
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 60,
+                    spread: 60,
+                    origin: { x: 0, y: 0.65 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 50,
+                    angle: 120,
+                    spread: 60,
+                    origin: { x: 1, y: 0.65 },
+                    colors: colors
+                });
+            }, 250);
+        }
+
+        yesBtn.addEventListener('click', () => {
+            noBtn.style.display = 'none';
+
+            page1.classList.remove('page-visible');
+            page1.classList.add('page-hidden');
+
+            setTimeout(() => {
+                page2.classList.remove('page-hidden');
+                page2.classList.add('page-visible');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                launchLoveConfetti();
+            }, 280);
+        });
+
+        celebrateMoreBtn.addEventListener('click', launchLoveConfetti);
+
+        backBtn.addEventListener('click', () => {
+            page2.classList.remove('page-visible');
+            page2.classList.add('page-hidden');
+
+            noBtn.style.display = 'inline-flex';
+            noBtn.style.position = 'relative';
+            noBtn.style.left = 'auto';
+            noBtn.style.top = 'auto';
+            noBtn.textContent = 'No 😢';
+            dodgeCount = 0;
+            yesScale = 1;
+            yesBtn.style.transform = 'scale(1)';
+
+            setTimeout(() => {
+                page1.classList.remove('page-hidden');
+                page1.classList.add('page-visible');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 280);
+        });
+
+
+        /**
+         * ====================================================================
+         * 4. MOVING PHOTOS GALLERY (MOBILE TOUCH-FRIENDLY + LAPTOP SMOOTH LOOP)
+         * ====================================================================
+         */
+        const marqueeWrapper = document.getElementById('marquee-wrapper');
+        const marqueeTrack = document.getElementById('marquee-track');
+        const photoUploader = document.getElementById('photo-uploader');
+
+        let memorySlides = [
+            {
+                caption: 'My Jaan & Me ❤️',
+                rotateClass: '-rotate-2',
+                isSharedSideways: true,
+                filterClass: ''
+            },
+            {
+                caption: 'Forever My Bacha 💕',
+                rotateClass: 'rotate-2',
+                isSharedSideways: true,
+                filterClass: 'sepia-[.12] contrast-105'
+            },
+            {
+                caption: 'Pure Happiness ✨',
+                rotateClass: '-rotate-1',
+                isSharedSideways: true,
+                filterClass: 'brightness-105 saturate-110'
+            },
+            {
+                caption: 'I Trust You Always 💖',
+                rotateClass: 'rotate-3',
+                isSharedSideways: true,
+                filterClass: ''
+            }
+        ];
+
+        function createPolaroidCard(item) {
+            const card = document.createElement('div');
+            card.className = `polaroid-frame shrink-0 w-44 sm:w-56 md:w-60 ${item.rotateClass} select-none`;
+
+            const imgWrapper = document.createElement('div');
+            imgWrapper.className = 'w-full aspect-square overflow-hidden rounded-lg bg-pink-50 relative';
+
+            const img = document.createElement('img');
+            img.alt = item.caption;
+
+            if (item.customSrc) {
+                img.src = item.customSrc;
+                img.className = `w-full h-full object-cover ${item.filterClass || ''}`;
+            } else {
+                img.className = `upright-couple-photo ${item.filterClass || ''}`;
+                attachResilientPhotoSource(img, true);
+            }
+
+            const caption = document.createElement('p');
+            caption.className = 'font-dancing text-base sm:text-lg md:text-xl text-deepRose mt-2 sm:mt-2.5 text-center';
+            caption.textContent = item.caption;
+
+            imgWrapper.appendChild(img);
+            card.appendChild(imgWrapper);
+            card.appendChild(caption);
+
+            return card;
+        }
+
+        function renderMarquee() {
+            marqueeTrack.innerHTML = '';
+            // Adjust animation duration dynamically based on number of photos so speed stays consistent
+            const durationSeconds = Math.max(18, memorySlides.length * 6);
+            marqueeTrack.style.animation = `marquee ${durationSeconds}s linear infinite`;
+
+            const doubledSlides = [...memorySlides, ...memorySlides];
+            doubledSlides.forEach((slide) => {
+                marqueeTrack.appendChild(createPolaroidCard(slide));
+            });
+        }
+
+        renderMarquee();
+
+        // Pause moving photos when Navya taps/holds on mobile so she can admire a picture
+        marqueeWrapper.addEventListener('touchstart', () => {
+            marqueeWrapper.classList.add('is-paused');
+        }, { passive: true });
+
+        marqueeWrapper.addEventListener('touchend', () => {
+            setTimeout(() => {
+                marqueeWrapper.classList.remove('is-paused');
+            }, 1200);
+        }, { passive: true });
+
+        // Allow adding more couple photos from phone gallery or laptop
+        photoUploader.addEventListener('change', (event) => {
+            const files = Array.from(event.target.files || []);
+            if (!files.length) return;
+
+            const tilts = ['-rotate-2', 'rotate-2', '-rotate-1', 'rotate-1'];
+            files.forEach((file, idx) => {
+                const objectUrl = URL.createObjectURL(file);
+                memorySlides.push({
+                    customSrc: objectUrl,
+                    caption: 'Us Forever ❤️',
+                    rotateClass: tilts[idx % tilts.length],
+                    isSharedSideways: false,
+                    filterClass: ''
+                });
+            });
+
+            renderMarquee();
+            launchLoveConfetti();
+        });
+    </script>
+</body>
+</html>
